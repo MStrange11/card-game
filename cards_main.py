@@ -27,13 +27,6 @@ mode03_img = pygame.image.load('mode03.jpg').convert_alpha()
 mode04_img = pygame.image.load('mode04.png').convert_alpha()
 
 
-
-
-
-
-
-
-
 class Buttom():
     def __init__(self, x, y, image, scale):
         width = image.get_width()
@@ -59,11 +52,14 @@ class Buttom():
 class comp():
     def __init__(self):
         self.deck = []
+        self.comp_deck = []
+        
         
 
     def rand(self, runn):
         self.decklen = len(self.deck)
-        print(self.decklen) 
+        print(self.decklen)
+         
         if self.decklen < 53:
             if runn == True:
                 sym = ["club", "spade", "diamond", "heart"] 
@@ -78,9 +74,13 @@ class comp():
                     color = "red"    
                 card_text = print(f"the card is {color} {symbol} {number}") 
                 runn = False
-            
 
-            
+            #text loading
+            font =  pygame.font.Font('freesansbold.ttf', 32)
+            text = font.render(card_text, True, (0, 255, 0), (0, 0, 255))
+            text = pygame.transform.scale(text , (100, 30) )                    
+
+                
             if symbol == "club":
                 if number > 0 and number < 14:
                     card0 = pygame.image.load(f"blackclub{number}.png")
@@ -94,19 +94,14 @@ class comp():
             elif symbol == "heart":    
                 if number > 0 and number < 14:
                     card0 = pygame.image.load(f"redheart{number}.png")
-        else :
-            print("No more card left in the deck")
-        scale_width = 180 
-        scale_height = scale_width * 3 / 2          
-        card1 = pygame.transform.scale(card0, (scale_width, scale_height))
-        self.deck.append(card0)
+                        
+            scale_width = 180 
+            scale_height = scale_width * 3 / 2          
+            card1 = pygame.transform.scale(card0, (scale_width, scale_height))
+            self.deck.append(card1)
+            # textRect = text.get_rect()
 
-        #text loading
-        # font =  pygame.font.Font('freesansbold.ttf', 32)
-        # text = font.render(card_text, True, (0, 255, 0), (0, 0, 255))
-        # textRect = text.get_rect()
-
-        return card1
+            return card1 
          
 class player():
     def __init__(self):
@@ -115,12 +110,12 @@ class player():
         self.player3 = []
         self.player4 = []
 
-    def RUN(self, card_pic, text):
+    def RUN(self, card_pic):
         # self.image2 = card_pic
         screen.blit(card_pic, (45, 45))
         self.player1.append(card_pic)
         print(len(self.player1) - 1)
-        screen.blit(text, (1160, 400))
+        # screen.blit(text, (1160, 400))
 
 # def fade(width, height): 
 #     fade = pygame.Surface((width, height))
@@ -142,10 +137,10 @@ class player():
 start_button = Buttom(500, 250, start_img, 1)
 exit_button = Buttom(1180, 595, exit_img, 0.4)
 turn_button = Buttom(1130, 90, turn_img, 0.7)
-mode01_button = Buttom(500, 100, mode01_img, 0.5)
-mode02_button = Buttom(700, 100, mode02_img, 0.5)
-mode03_button = Buttom(500, 300, mode03_img, 0.7)
-mode04_button = Buttom(700, 300, mode04_img, 0.1)
+mode01_button = Buttom(200, 100, mode01_img, 0.5)
+mode02_button = Buttom(800, 100, mode02_img, 0.5)
+mode03_button = Buttom(200, 300, mode03_img, 0.7)
+mode04_button = Buttom(800, 300, mode04_img, 0.1)
 turn_butt = comp()
 card_picture = player()
 player1 = player()
@@ -156,11 +151,11 @@ player4 = player()
 
 
 #setting up condition
-start = False
+start = True
 mainu = True
 runn = False
 modes = False
-card_pic = None
+# card_pic = None
 game_mode1 = False
 game_mode2 = False
 game_mode3 = False
@@ -171,29 +166,36 @@ while True:
     # redrawWindow()
     clock.tick(fps)
     screen.fill((179, 220, 109))
-    if mainu == True:
+    if start == True:
         if start_button.draw(screen):
-            start = True
+            
             # fade(1280, 650)
             print("Starting the game")
+            start = False
             mainu = False
+
+            
+
+
+    
+    if mainu == False:
+        if mode01_button.draw(screen):
+            print("mode01 activated")
+            mainu = True
+            modes = True
+        elif mode02_button.draw(screen):
+            print("mode02 activated")
+            mainus = True
+            modes = True
+        elif mode03_button.draw(screen):
+            print("mode03 activated")
+            mainu = True
+            modes = True
+        elif mode04_button.draw(screen):
+            print("mode04 activated")
+            mainu = True
             modes = True
 
-
-
-    # if mainu == False:
-    #     mode01_button.draw(screen)
-    #     mode02_button.draw(screen)
-    #     mode03_button.draw(screen)
-    #     mode04_button.draw(screen)
-    #     if mode01_button.draw(screen):
-    #         print("mode01 activated")
-    #     elif mode02_button.draw(screen):
-    #         print("mode02 activated")
-    #     elif mode03_button.draw(screen):
-    #         print("mode03 activated")
-    #     elif mode04_button.draw(screen):
-    #         print("mode04 activated")    
         
     
     if modes == True:    
@@ -201,9 +203,8 @@ while True:
         screen.blit(bg_image2, (0, 0))
         scale_width = 180 
         scale_height = scale_width * 3 / 2          
-        card_back_img = pygame.transform.scale(card_back_img, (scale_width, scale_height))
-        screen.blit(card_back_img, (45, 45))
-        # text = pygame.transform.scale(text , (100, 30) )
+        card_back_img1 = pygame.transform.scale(card_back_img, (scale_width, scale_height))
+        screen.blit(card_back_img1, (45, 45))
         
 
         if turn_button.draw(screen):
@@ -212,7 +213,8 @@ while True:
             if runn == True:
                 card_pic = turn_butt.rand(runn)
                 runn = False
-            card_picture.RUN(card_pic,)
+            card_picture.RUN(card_pic)
+            
             
             
             
